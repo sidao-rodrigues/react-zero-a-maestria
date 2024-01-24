@@ -6,11 +6,12 @@ interface InputProps extends InputPropsAntd {
   //InputHTMLAttributes<HTMLInputElement> {
   //extende todas as funções do component input do html (existe dessa forma comentada)
   title?: string;
+  margin?: string;
 }
 
-const Input = ({ title, ...props }: InputProps) => {
+const Input = ({ title, margin, ...props }: InputProps) => {
   return (
-    <BoxInput>
+    <BoxInput style={{ margin }}>
       {title && <TitleInput>{title}</TitleInput>}
       <InputAntd {...props} />
     </BoxInput>
