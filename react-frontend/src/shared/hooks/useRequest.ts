@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 
+import { connectionAPIPost } from '../functions/connection/connectionAPI';
 import { useGlobalContext } from './useGlobalContext';
 
 export const useRequests = () => {
@@ -25,18 +26,13 @@ export const useRequests = () => {
 
   const postRequest = async <T>(url: string, body: T) => {
     setLoading(true);
-    return await axios({
-      method: 'post',
-      url,
-      data: body,
-    })
+    return await connectionAPIPost(url, body)
       .then((result) => {
         setNotification('Login realizado com sucesso', 'success');
-        return result.data;
+        return result;
       })
-      .catch((error) => {
-        setNotification('Senha Inválida', 'error');
-        console.log(error);
+      .catch((error: Error) => {
+        setNotification(error.message, 'error');
       })
       .finally(() => setLoading(false));
   };
