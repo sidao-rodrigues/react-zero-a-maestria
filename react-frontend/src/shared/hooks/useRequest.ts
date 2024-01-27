@@ -17,7 +17,7 @@ export const useRequests = () => {
   const navigate = useNavigate();
   const { setNotification, setUser } = useGlobalContext();
 
-  const request = async <T, S>(
+  const request = async <T, S = null>(
     url: string,
     method: TMethodType,
     saveGlobal?: (object: T) => void,
@@ -29,20 +29,6 @@ export const useRequests = () => {
         if (saveGlobal) {
           saveGlobal(result);
         }
-        return result;
-      })
-      .catch((error: Error) => {
-        setNotification(error.message, 'error');
-        return undefined;
-      })
-      .finally(() => setLoading(false));
-  };
-
-  const postRequest = async <T, S>(url: string, body: S): Promise<T | undefined> => {
-    setLoading(true);
-    return connectionAPIPost<T, S>(url, body)
-      .then((result) => {
-        setNotification('Login realizado com sucesso', 'success');
         return result;
       })
       .catch((error: Error) => {
@@ -68,6 +54,5 @@ export const useRequests = () => {
     loading,
     authRequest,
     request,
-    postRequest,
   };
 };
