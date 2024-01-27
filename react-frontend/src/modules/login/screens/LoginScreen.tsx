@@ -12,6 +12,7 @@ import {
   LimitedContainer,
   TitleLogin,
 } from '../styles/loginScreen.styles';
+import { UserType } from '../types/UserType';
 
 interface ILoginReq {
   email: string;
@@ -33,8 +34,12 @@ const LoginScreen = () => {
   };
 
   const handleLogin = async () => {
-    setAccessToken('novo token');
-    postRequest<ILoginReq>('http://localhost:3330/auth', { email, password });
+    const user = await postRequest<UserType, ILoginReq>('http://localhost:3330/auth', {
+      email,
+      password,
+    });
+
+    setAccessToken(user?.accessToken || '');
   };
 
   return (
