@@ -8,8 +8,8 @@ import {
   unsetAuthorizationToken,
 } from '../../../shared/functions/connection/auth';
 import { connectionAPIGet } from '../../../shared/functions/connection/connectionAPI';
-import { LoginRoutesEnum } from '../../login/routes';
-import { ProductRoutesEnum } from '../../product/routes';
+import { ELoginRoutesEnum } from '../../login/routes';
+import { EProductRoutesEnum } from '../../product/routes';
 
 const FirstScreen = () => {
   const navigate = useNavigate();
@@ -21,14 +21,14 @@ const FirstScreen = () => {
       if (token) {
         await connectionAPIGet(URL_USER)
           .then(() => {
-            navigate(ProductRoutesEnum.PRODUCT);
+            navigate(EProductRoutesEnum.PRODUCT);
           })
           .catch(() => {
             unsetAuthorizationToken();
-            navigate(LoginRoutesEnum.LOGIN);
+            navigate(ELoginRoutesEnum.LOGIN);
           });
       } else {
-        navigate(LoginRoutesEnum.LOGIN);
+        navigate(ELoginRoutesEnum.LOGIN);
       }
     };
     verifyToken();

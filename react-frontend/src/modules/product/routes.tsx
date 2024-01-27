@@ -2,13 +2,13 @@ import { RouteObject } from 'react-router-dom';
 
 import ProductScreen from '.';
 
-export enum ProductRoutesEnum {
+export enum EProductRoutesEnum {
   PRODUCT = '/product',
 }
 
 export const productScreenRoutes: RouteObject[] = [
   {
-    path: ProductRoutesEnum.PRODUCT,
+    path: EProductRoutesEnum.PRODUCT,
     element: <ProductScreen />,
   },
 ];

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
+import { IUserType } from '../../modules/login/types/UserType';
+
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 interface INotificationProps {
@@ -10,6 +12,7 @@ interface INotificationProps {
 
 interface IGlobalData {
   notification?: INotificationProps;
+  user?: IUserType;
 }
 
 interface IGlobalContextProps {
@@ -47,8 +50,17 @@ export const useGlobalContext = () => {
     });
   };
 
+  const setUser = (user: IUserType) => {
+    setGlobalData({
+      ...globalData,
+      user,
+    });
+  };
+
   return {
     notification: globalData?.notification,
+    user: globalData?.user,
     setNotification,
+    setUser,
   };
 };

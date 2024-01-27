@@ -1,5 +1,8 @@
+import { useGlobalContext } from '../../../shared/hooks/useGlobalContext';
+
 const ProductScreen = () => {
-  return <div>Produtos</div>;
+  const { user } = useGlobalContext();
+  return <div>Produtos {user?.name}</div>;
 };
 
 export default ProductScreen;

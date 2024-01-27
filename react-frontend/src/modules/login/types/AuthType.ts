@@ -1,6 +1,6 @@
-import { UserType } from './UserType';
+import { IUserType } from './UserType';
 
-export interface AuthType {
+export interface IAuthType {
   accessToken: string;
-  user: UserType;
+  user: IUserType;
 }

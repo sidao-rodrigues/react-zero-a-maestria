@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AuthType } from '../../modules/login/types/AuthType';
-import { ProductRoutesEnum } from '../../modules/product/routes';
+import { IAuthType } from '../../modules/login/types/AuthType';
+import { EProductRoutesEnum } from '../../modules/product/routes';
 import { ERROR_INVALID_LOGIN } from '../constants/errorsStatus';
 import { URL_AUTH } from '../constants/urls';
 import { setAuthorizationToken } from '../functions/connection/auth';
@@ -13,7 +13,7 @@ import { useGlobalContext } from './useGlobalContext';
 export const useRequests = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setNotification } = useGlobalContext();
+  const { setNotification, setUser } = useGlobalContext();
 
   const getRequest = async (url: string) => {
     setLoading(true);
@@ -47,10 +47,11 @@ export const useRequests = () => {
   const authRequest = async <S>(body: S): Promise<void> => {
     setLoading(true);
 
-    await connectionAPIPost<AuthType, S>(URL_AUTH, body)
-      .then((result: AuthType) => {
+    await connectionAPIPost<IAuthType, S>(URL_AUTH, body)
+      .then((result: IAuthType) => {
+        setUser(result.user);
         setAuthorizationToken(result.accessToken);
-        navigate(ProductRoutesEnum.PRODUCT);
+        navigate(EProductRoutesEnum.PRODUCT);
       })
       .catch(() => setNotification(ERROR_INVALID_LOGIN, 'error'))
       .finally(() => setLoading(false));
