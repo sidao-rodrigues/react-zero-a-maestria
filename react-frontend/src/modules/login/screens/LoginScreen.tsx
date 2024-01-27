@@ -3,7 +3,6 @@ import { useState } from 'react';
 import Button from '../../../shared/components/buttons/button/button';
 import SVGLogo from '../../../shared/components/icons/SVGLogo';
 import Input from '../../../shared/components/inputs/input/input';
-import { useGlobalContext } from '../../../shared/hooks/useGlobalContext';
 import { useRequests } from '../../../shared/hooks/useRequest';
 import {
   BackgroundImage,
@@ -20,8 +19,6 @@ interface ILoginReq {
 }
 
 const LoginScreen = () => {
-  const { accessToken, setAccessToken } = useGlobalContext();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { postRequest, loading } = useRequests();
@@ -33,13 +30,11 @@ const LoginScreen = () => {
     setPassword(event.target.value);
   };
 
-  const handleLogin = async () => {
-    const user = await postRequest<UserType, ILoginReq>('http://localhost:3330/auth', {
+  const handleLogin = () => {
+    postRequest<UserType, ILoginReq>('http://localhost:3330/auth', {
       email,
       password,
     });
-
-    setAccessToken(user?.accessToken || '');
   };
 
   return (
@@ -49,7 +44,7 @@ const LoginScreen = () => {
           <LimitedContainer>
             <SVGLogo />
             <TitleLogin level={2} type="secondary">
-              LOGIN ({accessToken})
+              LOGIN
             </TitleLogin>
             <Input
               title="USUÁRIO"
