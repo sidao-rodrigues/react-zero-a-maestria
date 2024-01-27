@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +6,10 @@ import { EProductRoutesEnum } from '../../modules/product/routes';
 import { ERROR_INVALID_LOGIN } from '../constants/errorsStatus';
 import { URL_AUTH } from '../constants/urls';
 import { setAuthorizationToken } from '../functions/connection/auth';
-import { connectionAPIPost } from '../functions/connection/connectionAPI';
+import ConnectionAPI, {
+  connectionAPIPost,
+  TMethodType,
+} from '../functions/connection/connectionAPI';
 import { useGlobalContext } from './useGlobalContext';
 
 export const useRequests = () => {
@@ -15,17 +17,23 @@ export const useRequests = () => {
   const navigate = useNavigate();
   const { setNotification, setUser } = useGlobalContext();
 
-  const getRequest = async (url: string) => {
+  const request = async <T, S>(
+    url: string,
+    method: TMethodType,
+    saveGlobal?: (object: T) => void,
+    body?: S | unknown,
+  ): Promise<T | undefined> => {
     setLoading(true);
-    return await axios({
-      method: 'get',
-      url,
-    })
-      .then((result) => {
-        return result.data;
+    return await ConnectionAPI.connect<T, S>(url, method, body)
+      .then((result: T) => {
+        if (saveGlobal) {
+          saveGlobal(result);
+        }
+        return result;
       })
-      .catch(() => {
-        alert('Erro');
+      .catch((error: Error) => {
+        setNotification(error.message, 'error');
+        return undefined;
       })
       .finally(() => setLoading(false));
   };
@@ -46,8 +54,7 @@ export const useRequests = () => {
 
   const authRequest = async <S>(body: S): Promise<void> => {
     setLoading(true);
-
-    await connectionAPIPost<IAuthType, S>(URL_AUTH, body)
+    return await connectionAPIPost<IAuthType, S>(URL_AUTH, body)
       .then((result: IAuthType) => {
         setUser(result.user);
         setAuthorizationToken(result.accessToken);
@@ -60,7 +67,7 @@ export const useRequests = () => {
   return {
     loading,
     authRequest,
-    getRequest,
+    request,
     postRequest,
   };
 };
