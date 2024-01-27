@@ -11,7 +11,6 @@ import {
   LimitedContainer,
   TitleLogin,
 } from '../styles/loginScreen.styles';
-import { UserType } from '../types/UserType';
 
 interface ILoginReq {
   email: string;
@@ -21,7 +20,7 @@ interface ILoginReq {
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { postRequest, loading } = useRequests();
+  const { authRequest, loading } = useRequests();
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -31,7 +30,7 @@ const LoginScreen = () => {
   };
 
   const handleLogin = () => {
-    postRequest<UserType, ILoginReq>('http://localhost:3330/auth', {
+    authRequest<ILoginReq>({
       email,
       password,
     });

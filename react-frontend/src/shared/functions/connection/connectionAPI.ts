@@ -1,22 +1,30 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { ERROR_ACCESS_DANIED, ERROR_CONNECTION } from '../../constants/errorsStatus';
 import { EMethodsEnum } from '../../enums/methods.enum';
+import { getAuthorizationToken } from './auth';
 
 export default class ConnectionAPI {
   static async call<T, S>(url: string, method: string, body?: S | unknown): Promise<T> {
+    const config: AxiosRequestConfig = {
+      headers: {
+        Authorization: getAuthorizationToken(),
+        'Content-Type': 'application/json',
+      },
+    };
+
     switch (method) {
       case EMethodsEnum.GET:
-        return (await axios.get<T>(url)).data;
+        return (await axios.get<T>(url, config)).data;
       case EMethodsEnum.POST:
-        return (await axios.post<T>(url, body)).data;
+        return (await axios.post<T>(url, body, config)).data;
       case EMethodsEnum.PUT:
-        return (await axios.put<T>(url, body)).data;
+        return (await axios.put<T>(url, body, config)).data;
       case EMethodsEnum.PATCH:
-        return (await axios.patch<T>(url, body)).data;
+        return (await axios.patch<T>(url, body, config)).data;
       case EMethodsEnum.DELETE:
       default:
-        return (await axios.delete<T>(url)).data;
+        return (await axios.delete<T>(url, config)).data;
     }
   }
 
