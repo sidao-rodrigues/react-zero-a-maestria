@@ -13,7 +13,7 @@ const FirstScreen = () => {
     if (user) {
       navigate(EProductRoutesEnum.PRODUCT);
     }
-  }, []);
+  }, [user]);
 
   return <Spin />;
 };
