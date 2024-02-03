@@ -1,7 +1,9 @@
+import Search, { SearchProps } from 'antd/es/input/Search';
 import { ColumnsType } from 'antd/es/table';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Button from '../../../shared/components/buttons/button/button';
 import Screen from '../../../shared/components/screen/Screen';
 import Table from '../../../shared/components/table/Table';
@@ -14,6 +16,7 @@ import { IProductType } from '../../../shared/types/ProductType';
 import CategoryColumn from '../components/CategoryColumn';
 import TooltipImage from '../components/TooltipImage';
 import { EProductRoutesEnum } from '../routes';
+import { BoxButtons, LimiteSizeButton, LimiteSizeInput } from '../styles/product.styles';
 
 const columns: ColumnsType<IProductType> = [
   {
@@ -26,6 +29,8 @@ const columns: ColumnsType<IProductType> = [
     title: 'Nome',
     dataIndex: 'name',
     key: 'name',
+    sorter: (a: IProductType, b: IProductType) => (a.name > b.name ? -1 : a.name < b.name ? 1 : 0), //a.name.localeCompare(b.name),
+    sortDirections: ['descend'],
     render: (text: string) => <a>{text}</a>,
   },
   {
@@ -42,10 +47,15 @@ const columns: ColumnsType<IProductType> = [
   },
 ];
 
-const ProductScreen = () => {
+const Product = () => {
   const { products, setProducts } = useDataContext();
+  const [productsFiltered, setProductsFiltered] = useState<IProductType[]>([]);
   const { request } = useRequests();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setProductsFiltered([...products]);
+  }, [products]);
 
   useEffect(() => {
     request<IProductType[]>(URL_PRODUCT, EMethodsEnum.GET, setProducts);
@@ -55,21 +65,41 @@ const ProductScreen = () => {
     navigate(EProductRoutesEnum.PRODUCT_INSERT);
   };
 
+  const onSearch: SearchProps['onSearch'] = (value: string) => {
+    if (value) {
+      setProductsFiltered(products);
+    } else {
+      setProductsFiltered([
+        ...products.filter((product) => new RegExp(value, 'i').test(product.name)),
+      ]);
+    }
+  };
+
+  const listBreadcrumb: IListBreadcrumb[] = [
+    {
+      name: 'HOME',
+    },
+    {
+      name: 'PRODUTOS',
+    },
+  ];
+
   return (
-    <Screen
-      listBrandcrumb={[
-        {
-          name: 'HOME',
-        },
-        {
-          name: 'PRODUTOS',
-        },
-      ]}
-    >
-      <Button onClick={handleOnClickInsert}>Inserir</Button>
-      <Table columns={columns} dataSource={products} rowKey="id" />
+    <Screen listBrandcrumb={listBreadcrumb}>
+      <BoxButtons>
+        <LimiteSizeInput>
+          <Search placeholder="Buscar Produto" onSearch={onSearch} enterButton />
+        </LimiteSizeInput>
+
+        <LimiteSizeButton>
+          <Button type="primary" onClick={handleOnClickInsert}>
+            Inserir
+          </Button>
+        </LimiteSizeButton>
+      </BoxButtons>
+      <Table columns={columns} dataSource={productsFiltered} rowKey="id" />
     </Screen>
   );
 };
 
-export default ProductScreen;
+export default Product;
