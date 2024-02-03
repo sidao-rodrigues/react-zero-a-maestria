@@ -27,9 +27,7 @@ const columns: ColumnsType<IProductType> = [
     title: 'Categoria',
     dataIndex: 'category',
     key: 'category',
-    render: (_, product: IProductType) => (
-      <CategoryColumn category={product.category}></CategoryColumn>
-    ),
+    render: (_, product: IProductType) => <CategoryColumn category={product.category} />,
   },
   {
     title: 'Preço',

@@ -1,7 +1,8 @@
-import { Tooltip } from 'antd';
 import React from 'react';
 
+import Tooltip from '../../../shared/components/tooltip/Tooltip';
 import { IProductType } from '../../../shared/types/ProductType';
+import { ImageProduct } from '../styles/tooltipImage.styles';
 
 interface ITooltipImageProps {
   product: IProductType;
@@ -9,7 +10,7 @@ interface ITooltipImageProps {
 
 const TooltipImage: React.FC<ITooltipImageProps> = ({ product }: ITooltipImageProps) => {
   return (
-    <Tooltip title={product.name} placement="left">
+    <Tooltip tooltip={<ImageProduct src={product.image} />}>
       <span>{product.id}</span>
     </Tooltip>
   );

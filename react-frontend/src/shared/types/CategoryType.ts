@@ -1,4 +1,4 @@
-export interface CategoryType {
+export interface ICategoryType {
   id: number;
   name: string;
 }

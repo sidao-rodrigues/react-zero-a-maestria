@@ -1,10 +1,10 @@
 import { Tag } from 'antd';
 import React from 'react';
 
-import { CategoryType } from '../../../shared/types/CategoryType';
+import { ICategoryType } from '../../../shared/types/CategoryType';
 
 interface ICategoryColumnsProps {
-  category?: CategoryType;
+  category?: ICategoryType;
 }
 
 const colors: string[] = [
