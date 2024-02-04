@@ -48,7 +48,7 @@ export const connectionAPIGet = async <T>(url: string): Promise<T> => {
   return ConnectionAPI.connect(url, EMethodsEnum.GET);
 };
 
-export const connectionAPIPost = async <T, S>(url: string, body: S): Promise<T> => {
+export const connectionAPIPost = async <T, S = unknown>(url: string, body: S): Promise<T> => {
   return ConnectionAPI.connect(url, EMethodsEnum.POST, body);
 };
 
