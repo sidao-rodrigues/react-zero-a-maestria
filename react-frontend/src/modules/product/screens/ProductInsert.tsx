@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
@@ -9,24 +9,25 @@ import Select from '../../../shared/components/inputs/select/Select';
 import Screen from '../../../shared/components/screen/Screen';
 import { DisplayFlexJustifyRight } from '../../../shared/components/styles/display.styles';
 import { LimitedContainer } from '../../../shared/components/styles/limited.styles';
-import { URL_CATEGORY, URL_PRODUCT } from '../../../shared/constants/urls';
-import { IInsertProduct } from '../../../shared/dtos/InsertProduct.dto';
+import { URL_CATEGORY } from '../../../shared/constants/urls';
 import { EMethodsEnum } from '../../../shared/enums/methods.enum';
-import { connectionAPIPost } from '../../../shared/functions/connection/connectionAPI';
 import { useDataContext } from '../../../shared/hooks/useDataContext';
-import { useGlobalContext } from '../../../shared/hooks/useGlobalContext';
 import { useRequests } from '../../../shared/hooks/useRequest';
+import { useInsertProduct } from '../hooks/useInsertProduct';
 import { EProductRoutesEnum } from '../routes';
 import { ProductInserContainer } from '../styles/productInsert.styles';
 
 const ProductInsert: React.FC = () => {
-  const [product, setProduct] = useState<IInsertProduct>({
-    name: '',
-    price: 0,
-    image: '',
-  });
   const { categories, setCategories } = useDataContext();
-  const { setNotification } = useGlobalContext();
+  const {
+    loading,
+    disabledButton,
+    product,
+    handleOnChangeInput,
+    handleOnChangeSelect,
+    handleInsertProduct,
+  } = useInsertProduct();
+
   const { request } = useRequests();
   const navigate = useNavigate();
 
@@ -36,37 +37,8 @@ const ProductInsert: React.FC = () => {
     }
   }, []);
 
-  const handleInsertProduct = async () => {
-    await connectionAPIPost<IInsertProduct>(URL_PRODUCT, product)
-      .then(() => {
-        setNotification('Sucesso!', 'success', 'Produto Inserido com Sucesso!');
-        navigate(EProductRoutesEnum.PRODUCT);
-      })
-      .catch((error: Error) => {
-        setNotification(error.message, 'error');
-      });
-  };
-
   const handleOnClickCancel = (): void => {
     navigate(EProductRoutesEnum.PRODUCT);
-  };
-
-  const onChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    nameObject: string,
-    isNumber?: boolean,
-  ) => {
-    setProduct({
-      ...product,
-      [nameObject]: isNumber ? Number(event.target.value) : event.target.value,
-    });
-  };
-
-  const handleOnChange = (value: string): void => {
-    setProduct({
-      ...product,
-      categoryId: Number(value),
-    });
   };
 
   const listBreadcrumb: IListBreadcrumb[] = [
@@ -87,21 +59,21 @@ const ProductInsert: React.FC = () => {
       <ProductInserContainer>
         <LimitedContainer width={400}>
           <Input
-            onChange={(event) => onChange(event, 'name')}
+            onChange={(event) => handleOnChangeInput(event, 'name')}
             value={product.name}
             title="Nome"
             placeholder="Nome"
             margin="0px 0px 16px 0px"
           />
           <Input
-            onChange={(event) => onChange(event, 'image')}
+            onChange={(event) => handleOnChangeInput(event, 'image')}
             value={product.image}
             title="Url Imagem"
             placeholder="Url Imagem"
             margin="0px 0px 16px 0px"
           />
           <InputMoney
-            onChange={(event) => onChange(event, 'price', true)}
+            onChange={(event) => handleOnChangeInput(event, 'price', true)}
             value={product.price}
             title="Preço"
             placeholder="Preço"
@@ -110,7 +82,7 @@ const ProductInsert: React.FC = () => {
           <Select
             title="Categoria"
             margin="0px 0px 32px 0px"
-            onChange={handleOnChange}
+            onChange={handleOnChangeSelect}
             placeholder="Selectione uma categoria"
             options={categories.map((category) => ({
               value: `${category.id}`,
@@ -124,7 +96,12 @@ const ProductInsert: React.FC = () => {
               </Button>
             </LimitedContainer>
             <LimitedContainer width={120}>
-              <Button onClick={handleInsertProduct} type="primary">
+              <Button
+                loading={loading}
+                disabled={disabledButton}
+                onClick={handleInsertProduct}
+                type="primary"
+              >
                 Inserir Produto
               </Button>
             </LimitedContainer>
