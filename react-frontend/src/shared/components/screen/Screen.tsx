@@ -1,3 +1,5 @@
+import { Divider } from 'antd';
+
 import Breadcrumb, { IListBreadcrumb } from '../breadcrumb/Breadcrumb';
 import { ScreenContainer } from './screen.styles';
 
@@ -9,7 +11,12 @@ interface IScreenProps {
 const Screen: React.FC<IScreenProps> = ({ children, listBrandcrumb }: IScreenProps) => {
   return (
     <ScreenContainer>
-      {listBrandcrumb && <Breadcrumb listBrandcrumb={listBrandcrumb} />}
+      {listBrandcrumb && (
+        <>
+          <Breadcrumb listBrandcrumb={listBrandcrumb} />
+          <Divider />
+        </>
+      )}
       {children}
     </ScreenContainer>
   );
