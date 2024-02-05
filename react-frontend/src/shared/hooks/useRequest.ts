@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { IAuthType } from '../../modules/login/types/AuthType';
-import { EProductRoutesEnum } from '../../modules/product/routes';
 import { ERROR_INVALID_LOGIN } from '../constants/errorsStatus';
 import { URL_AUTH } from '../constants/urls';
 import { setAuthorizationToken } from '../functions/connection/auth';
@@ -38,13 +36,13 @@ export const useRequests = () => {
   };
 
   const authRequest = async <S>(body: S): Promise<void> => {
-    const navigate = useNavigate();
     setLoading(true);
     return await connectionAPIPost<IAuthType, S>(URL_AUTH, body)
       .then((result: IAuthType) => {
         setUser(result.user);
         setAuthorizationToken(result.accessToken);
-        navigate(EProductRoutesEnum.PRODUCT);
+        location.href = '/';
+        return;
       })
       .catch(() => setNotification(ERROR_INVALID_LOGIN, 'error'))
       .finally(() => setLoading(false));

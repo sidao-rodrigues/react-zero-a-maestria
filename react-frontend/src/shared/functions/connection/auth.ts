@@ -28,3 +28,8 @@ export const verifyLoggedIn = async () => {
   });
   return null;
 };
+
+export const logout = (): void => {
+  unsetAuthorizationToken();
+  location.href = ELoginRoutesEnum.LOGIN;
+};
