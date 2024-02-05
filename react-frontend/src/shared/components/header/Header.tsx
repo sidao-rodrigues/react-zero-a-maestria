@@ -1,11 +1,13 @@
 import { CloseOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { logout } from '../../functions/connection/auth';
 import { HeaderContainer, LogoExit } from './header.styles';
 
 const Header: React.FC = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const showModal = () => {
@@ -22,7 +24,7 @@ const Header: React.FC = () => {
         closeIcon={<CloseOutlined />}
         title="Atenção"
         open={open}
-        onOk={logout}
+        onOk={() => logout(navigate)}
         onCancel={hideModal}
         okText="Sim"
         cancelText="Cancelar"

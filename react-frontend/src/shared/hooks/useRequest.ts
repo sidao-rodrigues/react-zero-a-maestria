@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { NavigateFunction } from 'react-router-dom';
 
+import { EFirstScreenRoutesEnum } from '../../modules/firstScreen/routes';
 import { IAuthType } from '../../modules/login/types/AuthType';
 import { ERROR_INVALID_LOGIN } from '../constants/errorsStatus';
 import { URL_AUTH } from '../constants/urls';
@@ -35,14 +37,13 @@ export const useRequests = () => {
       .finally(() => setLoading(false));
   };
 
-  const authRequest = async <S>(body: S): Promise<void> => {
+  const authRequest = async <S>(navigate: NavigateFunction, body: S): Promise<void> => {
     setLoading(true);
     return await connectionAPIPost<IAuthType, S>(URL_AUTH, body)
       .then((result: IAuthType) => {
         setUser(result.user);
         setAuthorizationToken(result.accessToken);
-        location.href = '/';
-        return;
+        navigate(EFirstScreenRoutesEnum.FIRST_SCREEN);
       })
       .catch(() => setNotification(ERROR_INVALID_LOGIN, 'error'))
       .finally(() => setLoading(false));

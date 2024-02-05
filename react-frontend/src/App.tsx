@@ -7,7 +7,7 @@ import { loginRoutes } from './modules/login/routes';
 import { productScreenRoutes } from './modules/product/routes';
 import { URL_USER } from './shared/constants/urls';
 import { EMethodsEnum } from './shared/enums/methods.enum';
-import { verifyLoggedIn } from './shared/functions/connection/auth';
+import { getAuthorizationToken, verifyLoggedIn } from './shared/functions/connection/auth';
 import { useGlobalContext } from './shared/hooks/useGlobalContext';
 import { useNotification } from './shared/hooks/useNotification';
 import { useRequests } from './shared/hooks/useRequest';
@@ -16,7 +16,7 @@ const routes: RouteObject[] = [...loginRoutes];
 const routesLoggedIn: RouteObject[] = [...productScreenRoutes, ...firstScreenRoutes].map(
   (route) => ({
     ...route,
-    loader: () => verifyLoggedIn,
+    loader: verifyLoggedIn,
   }),
 );
 
@@ -28,7 +28,11 @@ function App() {
   const { request } = useRequests();
 
   useEffect(() => {
-    request(URL_USER, EMethodsEnum.GET, setUser);
+    const token = getAuthorizationToken();
+
+    if (token) {
+      request(URL_USER, EMethodsEnum.GET, setUser);
+    }
   }, []);
 
   return (
