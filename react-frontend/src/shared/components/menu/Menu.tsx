@@ -73,7 +73,6 @@ const Menu: React.FC = () => {
   ];
 
   const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e);
     setCurrent(e.key);
   };
 
