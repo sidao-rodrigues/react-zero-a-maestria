@@ -45,6 +45,7 @@ const Category: React.FC = () => {
   };
 
   const handlerOnSearch: SearchProps['onSearch'] = (value: string) => {
+    console.log(value);
     // if (value) {
     //   setProductsFiltered(products);
     // } else {

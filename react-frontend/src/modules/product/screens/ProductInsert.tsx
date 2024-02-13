@@ -6,12 +6,14 @@ import Input from '../../../shared/components/inputs/input/input';
 import InputMoney from '../../../shared/components/inputs/inputMoney/InputMoney';
 import Select from '../../../shared/components/inputs/select/Select';
 import Screen from '../../../shared/components/screen/Screen';
-import { DisplayFlexJustifyRight } from '../../../shared/components/styles/display.styles';
+import {
+  DisplayFlexJustifyCenter,
+  DisplayFlexJustifyRight,
+} from '../../../shared/components/styles/display.styles';
 import { LimitedContainer } from '../../../shared/components/styles/limited.styles';
 import { useCategory } from '../../category/hooks/useCategory';
 import { useInsertProduct } from '../hooks/useInsertProduct';
 import { EProductRoutesEnum } from '../routes';
-import { ProductInserContainer } from '../styles/productInsert.styles';
 
 const ProductInsert: React.FC = () => {
   const { categories } = useCategory();
@@ -45,7 +47,7 @@ const ProductInsert: React.FC = () => {
 
   return (
     <Screen listBrandcrumb={listBreadcrumb}>
-      <ProductInserContainer>
+      <DisplayFlexJustifyCenter>
         <LimitedContainer width={400}>
           <Input
             onChange={(event) => handleOnChangeInput(event, 'name')}
@@ -96,7 +98,7 @@ const ProductInsert: React.FC = () => {
             </LimitedContainer>
           </DisplayFlexJustifyRight>
         </LimitedContainer>
-      </ProductInserContainer>
+      </DisplayFlexJustifyCenter>
     </Screen>
   );
 };
