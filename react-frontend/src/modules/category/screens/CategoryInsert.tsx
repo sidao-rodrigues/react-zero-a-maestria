@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Button from '../../../shared/components/buttons/button/button';
 import Input from '../../../shared/components/inputs/input/input';
@@ -13,12 +11,8 @@ import { useInsertCategory } from '../hooks/useInsertCategory';
 import { ECategoryRoutesEnum } from '../routes';
 
 const CategoryInsert: React.FC = () => {
-  const { name, loading, handleOnChangeName, insertCategory } = useInsertCategory();
-  const navigate = useNavigate();
-
-  const handleOnClickCancel = () => {
-    navigate(ECategoryRoutesEnum.CATEGORY);
-  };
+  const { name, loading, disabledButton, handleOnChangeName, insertCategory, handleOnClickCancel } =
+    useInsertCategory();
 
   const listBreadcrumb: IListBreadcrumb[] = [
     {
@@ -51,7 +45,12 @@ const CategoryInsert: React.FC = () => {
               </Button>
             </LimitedContainer>
             <LimitedContainer width={160}>
-              <Button loading={loading} onClick={insertCategory} type="primary">
+              <Button
+                disabled={disabledButton}
+                loading={loading}
+                onClick={insertCategory}
+                type="primary"
+              >
                 Inserir Categoria
               </Button>
             </LimitedContainer>

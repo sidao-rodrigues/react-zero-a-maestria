@@ -67,7 +67,7 @@ const Product = () => {
   };
 
   const onSearch: SearchProps['onSearch'] = (value: string) => {
-    if (value) {
+    if (!value) {
       setProductsFiltered(products);
     } else {
       setProductsFiltered([

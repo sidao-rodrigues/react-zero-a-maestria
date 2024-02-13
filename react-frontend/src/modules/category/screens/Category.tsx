@@ -1,4 +1,4 @@
-import Search, { SearchProps } from 'antd/es/input/Search';
+import Search from 'antd/es/input/Search';
 import { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,22 +37,11 @@ const columns: ColumnsType<ICategoryType> = [
 ];
 
 const Category: React.FC = () => {
-  const { categories } = useCategory();
+  const { categories, handleOnChangeSearch } = useCategory();
   const navigate = useNavigate();
 
   const handleOnClickCategory: React.MouseEventHandler<HTMLElement> = (): void => {
     navigate(ECategoryRoutesEnum.CATEGORY_INSERT);
-  };
-
-  const handlerOnSearch: SearchProps['onSearch'] = (value: string) => {
-    console.log(value);
-    // if (value) {
-    //   setProductsFiltered(products);
-    // } else {
-    //   setProductsFiltered([
-    //     ...products.filter((product) => new RegExp(value, 'i').test(product.name)),
-    //   ]);
-    // }
   };
 
   const listBreadcrumb: IListBreadcrumb[] = [
@@ -68,7 +57,7 @@ const Category: React.FC = () => {
     <Screen listBrandcrumb={listBreadcrumb}>
       <DisplayFlexJustifyBetween margin="0px 0px 16px 0px">
         <LimitedContainer width={240}>
-          <Search placeholder="Buscar Produto" onSearch={handlerOnSearch} enterButton />
+          <Search placeholder="Buscar Categoria" onSearch={handleOnChangeSearch} enterButton />
         </LimitedContainer>
         <LimitedContainer width={120}>
           <Button type="primary" onClick={handleOnClickCategory}>
