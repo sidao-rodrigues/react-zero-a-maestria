@@ -10,6 +10,7 @@ import { Menu as MenuAntd } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { ECategoryRoutesEnum } from '../../../modules/category/routes';
 import { EProductRoutesEnum } from '../../../modules/product/routes';
 import { ContainerLogoName, ContainerMenu, LogoMenu, NameCompany } from './menu.styles';
 
@@ -50,12 +51,12 @@ const Menu: React.FC = () => {
         {
           key: 'category_view',
           label: 'Visualizar',
-          onClick: () => navitage(EProductRoutesEnum.PRODUCT),
+          onClick: () => navitage(ECategoryRoutesEnum.CATEGORY),
         },
         {
           key: 'category_insert',
           label: 'Inserir',
-          onClick: () => navitage(EProductRoutesEnum.PRODUCT_INSERT),
+          onClick: () => navitage(ECategoryRoutesEnum.CATEGORY_INSERT),
         },
       ],
     },

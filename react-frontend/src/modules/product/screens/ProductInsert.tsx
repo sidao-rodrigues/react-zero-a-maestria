@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
@@ -9,16 +8,13 @@ import Select from '../../../shared/components/inputs/select/Select';
 import Screen from '../../../shared/components/screen/Screen';
 import { DisplayFlexJustifyRight } from '../../../shared/components/styles/display.styles';
 import { LimitedContainer } from '../../../shared/components/styles/limited.styles';
-import { URL_CATEGORY } from '../../../shared/constants/urls';
-import { EMethodsEnum } from '../../../shared/enums/methods.enum';
-import { useDataContext } from '../../../shared/hooks/useDataContext';
-import { useRequests } from '../../../shared/hooks/useRequest';
+import { useCategory } from '../../category/hooks/useCategory';
 import { useInsertProduct } from '../hooks/useInsertProduct';
 import { EProductRoutesEnum } from '../routes';
 import { ProductInserContainer } from '../styles/productInsert.styles';
 
 const ProductInsert: React.FC = () => {
-  const { categories, setCategories } = useDataContext();
+  const { categories } = useCategory();
   const {
     loading,
     disabledButton,
@@ -28,14 +24,7 @@ const ProductInsert: React.FC = () => {
     handleInsertProduct,
   } = useInsertProduct();
 
-  const { request } = useRequests();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (categories.length === 0) {
-      request(URL_CATEGORY, EMethodsEnum.GET, setCategories);
-    }
-  }, []);
 
   const handleOnClickCancel = (): void => {
     navigate(EProductRoutesEnum.PRODUCT);
