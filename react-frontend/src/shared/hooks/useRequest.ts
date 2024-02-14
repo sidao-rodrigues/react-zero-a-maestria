@@ -3,6 +3,7 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { EFirstScreenRoutesEnum } from '../../modules/firstScreen/routes';
 import { IAuthType } from '../../modules/login/types/AuthType';
+import { useGlobalReducer } from '../../store/reducers/globalReducer/useGlobalReducer';
 import { ERROR_INVALID_LOGIN } from '../constants/errorsStatus';
 import { URL_AUTH } from '../constants/urls';
 import { setAuthorizationToken } from '../functions/connection/auth';
@@ -10,11 +11,10 @@ import ConnectionAPI, {
   connectionAPIPost,
   TMethodType,
 } from '../functions/connection/connectionAPI';
-import { useGlobalContext } from './useGlobalContext';
 
 export const useRequests = () => {
   const [loading, setLoading] = useState(false);
-  const { setNotification, setUser } = useGlobalContext();
+  const { setNotification, setUser } = useGlobalReducer();
 
   const request = async <T, S = null>(
     url: string,

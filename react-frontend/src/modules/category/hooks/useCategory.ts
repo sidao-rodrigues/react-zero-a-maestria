@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 
 import { URL_CATEGORY } from '../../../shared/constants/urls';
 import { EMethodsEnum } from '../../../shared/enums/methods.enum';
-import { useDataContext } from '../../../shared/hooks/useDataContext';
+// import { useDataContext } from '../../../shared/hooks/useDataContext';
 import { useRequests } from '../../../shared/hooks/useRequest';
+import { useCategoryReducer } from '../../../store/reducers/categoryReducer/useCategoryReducer';
 import { ICategoryType } from './../../../shared/types/CategoryType';
 
 export const useCategory = () => {
-  const { categories, setCategories } = useDataContext();
+  // const { categories, setCategories } = useDataContext();
+  const { categories, setCategories } = useCategoryReducer();
   const [categoriesFiltered, setCategoriesFiltered] = useState<ICategoryType[]>([]);
   const { request } = useRequests();
 
