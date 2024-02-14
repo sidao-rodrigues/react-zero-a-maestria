@@ -1,4 +1,4 @@
-import Search from 'antd/es/input/Search';
+import { Input } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,8 @@ import Table from '../../../shared/components/table/Table';
 import { ICategoryType } from '../../../shared/types/CategoryType';
 import { useCategory } from '../hooks/useCategory';
 import { ECategoryRoutesEnum } from '../routes';
+
+const { Search } = Input;
 
 const columns: ColumnsType<ICategoryType> = [
   {

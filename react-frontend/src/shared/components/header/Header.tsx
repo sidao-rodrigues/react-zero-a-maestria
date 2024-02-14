@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { logout } from '../../functions/connection/auth';
+import { HeaderTestIdEnum } from './__tests__/headerTestIdEnum';
 import { HeaderContainer, LogoExit } from './header.styles';
 
 const Header: React.FC = () => {
@@ -21,6 +22,7 @@ const Header: React.FC = () => {
   return (
     <>
       <Modal
+        data-testid={HeaderTestIdEnum.HEADER_MODAL}
         closeIcon={<CloseOutlined />}
         title="Atenção"
         open={open}
@@ -29,10 +31,10 @@ const Header: React.FC = () => {
         okText="Sim"
         cancelText="Cancelar"
       >
-        <p>Deseja realmente sair?</p>
+        <p data-testid={HeaderTestIdEnum.HEADER_MODAL_P}>Deseja realmente sair?</p>
       </Modal>
-      <HeaderContainer>
-        <LogoExit onClick={showModal} />
+      <HeaderContainer data-testid={HeaderTestIdEnum.HEADER_CONTAINER}>
+        <LogoExit data-testid={HeaderTestIdEnum.HEADER_LOGO} onClick={showModal} />
       </HeaderContainer>
     </>
   );

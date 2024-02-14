@@ -1,4 +1,5 @@
-import Search, { SearchProps } from 'antd/es/input/Search';
+import { Input } from 'antd';
+import { SearchProps } from 'antd/es/input/Search';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +20,8 @@ import { useProductReducer } from '../../../store/reducers/productReducer/usePro
 import CategoryColumn from '../components/CategoryColumn';
 import TooltipImage from '../components/TooltipImage';
 import { EProductRoutesEnum } from '../routes';
+
+const { Search } = Input;
 
 const columns: ColumnsType<IProductType> = [
   {
