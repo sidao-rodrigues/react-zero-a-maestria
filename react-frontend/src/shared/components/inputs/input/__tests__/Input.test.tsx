@@ -8,8 +8,8 @@
 
 import { render, screen } from '@testing-library/react';
 
-import Input from '../input/input';
-import { InputTestIdEnum } from './inputTestIdEnum';
+import { InputTestIdEnum } from '../enum/inputTestIdEnum';
+import Input from '../input';
 
 const TEST_ID = 'TEST_ID_INPUT';
 const TITLE_MOCK = 'TITLE_MOCK';

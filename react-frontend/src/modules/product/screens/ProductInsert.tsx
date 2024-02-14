@@ -12,6 +12,7 @@ import {
 } from '../../../shared/components/styles/display.styles';
 import { LimitedContainer } from '../../../shared/components/styles/limited.styles';
 import { useCategory } from '../../category/hooks/useCategory';
+import { ProductInsertTestIdEnum } from '../enum/ProductInsertTestIdEnum';
 import { useInsertProduct } from '../hooks/useInsertProduct';
 import { EProductRoutesEnum } from '../routes';
 
@@ -47,9 +48,10 @@ const ProductInsert: React.FC = () => {
 
   return (
     <Screen listBrandcrumb={listBreadcrumb}>
-      <DisplayFlexJustifyCenter>
+      <DisplayFlexJustifyCenter data-testid={ProductInsertTestIdEnum.PRODUCT_INSERT_CONTAINER}>
         <LimitedContainer width={400}>
           <Input
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_NAME}
             onChange={(event) => handleOnChangeInput(event, 'name')}
             value={product.name}
             title="Nome"
@@ -57,6 +59,7 @@ const ProductInsert: React.FC = () => {
             margin="0px 0px 16px 0px"
           />
           <Input
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
             onChange={(event) => handleOnChangeInput(event, 'image')}
             value={product.image}
             title="Url Imagem"
@@ -64,6 +67,7 @@ const ProductInsert: React.FC = () => {
             margin="0px 0px 16px 0px"
           />
           <InputMoney
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_PRICE}
             onChange={(event) => handleOnChangeInput(event, 'price', true)}
             value={product.price}
             title="Preço"
@@ -71,6 +75,7 @@ const ProductInsert: React.FC = () => {
             margin="0px 0px 16px 0px"
           />
           <Select
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_SELECT}
             title="Categoria"
             margin="0px 0px 32px 0px"
             onChange={handleOnChangeSelect}
@@ -82,12 +87,17 @@ const ProductInsert: React.FC = () => {
           ></Select>
           <DisplayFlexJustifyRight>
             <LimitedContainer margin="0px 8px" width={120}>
-              <Button danger onClick={handleOnClickCancel}>
+              <Button
+                data-testid={ProductInsertTestIdEnum.PRODUCT_BUTTON_CANCEL}
+                danger
+                onClick={handleOnClickCancel}
+              >
                 Cancelar
               </Button>
             </LimitedContainer>
             <LimitedContainer width={120}>
               <Button
+                data-testid={ProductInsertTestIdEnum.PRODUCT_BUTTON_INSERT}
                 loading={loading}
                 disabled={disabledButton}
                 onClick={handleInsertProduct}

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { logout } from '../../functions/connection/auth';
-import { HeaderTestIdEnum } from './__tests__/headerTestIdEnum';
+import { HeaderTestIdEnum } from './enum/headerTestIdEnum';
 import { HeaderContainer, LogoExit } from './header.styles';
 
 const Header: React.FC = () => {
