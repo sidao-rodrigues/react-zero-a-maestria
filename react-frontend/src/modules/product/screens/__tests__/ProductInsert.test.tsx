@@ -1,6 +1,6 @@
 //libs and commmands
 
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 
 import { mockProductInsert } from '../../__mocks__/productInsert.mock';
 import { ProductInsertTestIdEnum } from '../../enum/ProductInsertTestIdEnum';
@@ -23,12 +23,18 @@ jest.mock('../../../category/hooks/useCategory', () => ({
   }),
 }));
 
+let value = '',
+  type = '';
+
 jest.mock('../../hooks/useInsertProduct', () => ({
   useInsertProduct: () => ({
     loading: false,
     disabledButton: false,
     product: mockProductInsert,
-    handleOnChangeInput: jest.fn(),
+    handleOnChangeInput: (e: React.ChangeEvent<HTMLInputElement>, x: string) => {
+      value = e.target.value;
+      type = x;
+    },
     handleOnChangeSelect: jest.fn(),
     handleInsertProduct: jest.fn(),
   }),
@@ -45,5 +51,38 @@ describe('Test Insert Product', () => {
     expect(getByTestId(ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE));
     expect(getByTestId(ProductInsertTestIdEnum.PRODUCT_INPUT_PRICE));
     expect(getByTestId(ProductInsertTestIdEnum.PRODUCT_INPUT_SELECT));
+  });
+
+  it('should call handleOnChangeInput in change name', () => {
+    const { getByTestId } = render(<ProductInsert />);
+
+    const input = getByTestId(ProductInsertTestIdEnum.PRODUCT_INPUT_NAME);
+
+    fireEvent.change(input, { target: { value: 'Mock name' } });
+
+    expect(value).toEqual('Mock name');
+    expect(type).toEqual('name');
+  });
+
+  it('should call handleOnChangeInput in change price', () => {
+    const { getByTestId } = render(<ProductInsert />);
+
+    const input = getByTestId(ProductInsertTestIdEnum.PRODUCT_INPUT_PRICE);
+
+    fireEvent.change(input, { target: { value: `${mockProductInsert.price}` } });
+
+    expect(value.replace('..', '.')).toEqual(`${mockProductInsert.price}`);
+    expect(type).toEqual('price');
+  });
+
+  it('should call handleOnChangeInput in change image', () => {
+    const { getByTestId } = render(<ProductInsert />);
+
+    const input = getByTestId(ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE);
+
+    fireEvent.change(input, { target: { value: 'http://image.com' } });
+
+    expect(value).toEqual('http://image.com');
+    expect(type).toEqual('image');
   });
 });
