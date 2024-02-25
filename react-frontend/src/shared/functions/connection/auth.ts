@@ -9,7 +9,7 @@ import { getItemStorage, removeItemStorage, setItemStorage } from './storageProx
 
 export const unsetAuthorizationToken = () => removeItemStorage(AUTHORIZATION_KEY);
 
-export const setAuthorizationToken = (token: string) => {
+export const setAuthorizationToken = (token?: string) => {
   if (token) {
     setItemStorage(AUTHORIZATION_KEY, token);
   }
