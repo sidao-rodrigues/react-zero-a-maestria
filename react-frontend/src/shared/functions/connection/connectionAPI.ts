@@ -57,7 +57,7 @@ export const connectionAPIPut = async <T, S>(url: string, body: S): Promise<T> =
 };
 
 export const connectionAPIPatch = async <T, S>(url: string, body: S): Promise<T> => {
-  return ConnectionAPI.connect(url, EMethodsEnum.PUT, body);
+  return ConnectionAPI.connect(url, EMethodsEnum.PATCH, body);
 };
 
 export const connectionAPIDelete = async <T>(url: string): Promise<T> => {
