@@ -52,7 +52,7 @@ const Order: React.FC = () => {
     <Screen listBrandcrumb={listBreadcrumb}>
       <Table
         onRow={(record) => ({
-          onClick: () => navigate(EOrderRoutesEnum.ORDER_ID),
+          onClick: () => navigate(`${EOrderRoutesEnum.ORDER}/${record.id}`),
         })}
         columns={columns}
         dataSource={orders}

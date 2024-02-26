@@ -1,7 +1,9 @@
 import { Badge, Descriptions, DescriptionsProps, Divider } from 'antd';
+import { useParams } from 'react-router-dom';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Screen from '../../../shared/components/screen/Screen';
+import { useOrderDetail } from '../hooks/useOrderDetail';
 import { EOrderRoutesEnum } from '../routes';
 
 const userItems: DescriptionsProps['items'] = [
@@ -14,7 +16,7 @@ const userItems: DescriptionsProps['items'] = [
     key: '2',
     label: 'Email',
     children: 'Email',
-    span: 2,
+    span: { xs: 2 },
   },
   {
     key: '3',
@@ -25,21 +27,22 @@ const userItems: DescriptionsProps['items'] = [
     key: '4',
     label: 'CPF',
     children: '123.123.123-00',
-    span: 2,
+    span: { xs: 2 },
   },
 ];
+
 const paymentItems: DescriptionsProps['items'] = [
   {
     key: '5',
     label: 'Usage Time',
     children: '2019-04-24 18:00:00',
-    span: 2,
+    span: { xs: 2 },
   },
   {
     key: '6',
     label: 'Status',
     children: <Badge status="processing" text="Running" />,
-    span: 3,
+    span: { xs: 3 },
   },
   {
     key: '7',
@@ -79,6 +82,9 @@ const paymentItems: DescriptionsProps['items'] = [
 ];
 
 const OrderDetail: React.FC = () => {
+  const { orderId } = useParams<{ orderId: string }>();
+  const { order } = useOrderDetail(orderId);
+
   const listBreadcrumb: IListBreadcrumb[] = [
     {
       name: 'HOME',
