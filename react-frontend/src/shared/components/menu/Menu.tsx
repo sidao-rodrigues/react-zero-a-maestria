@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ECategoryRoutesEnum } from '../../../modules/category/routes';
+import { EOrderRoutesEnum } from '../../../modules/orders/routes';
 import { EProductRoutesEnum } from '../../../modules/product/routes';
 import { ContainerLogoName, ContainerMenu, LogoMenu, NameCompany } from './menu.styles';
 
@@ -64,6 +65,7 @@ const Menu: React.FC = () => {
       key: 'order',
       label: 'Pedidos',
       icon: <SafetyCertificateOutlined />,
+      onClick: () => navitage(EOrderRoutesEnum.ORDER),
     },
     {
       key: 'user',
