@@ -1,89 +1,70 @@
-import { Badge, Descriptions, DescriptionsProps, Divider } from 'antd';
+import { Descriptions, DescriptionsProps, Divider, Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Screen from '../../../shared/components/screen/Screen';
+import { DisplayFlexJustifyCenter } from '../../../shared/components/styles/display.styles';
 import { useOrderDetail } from '../hooks/useOrderDetail';
 import { EOrderRoutesEnum } from '../routes';
 
-const userItems: DescriptionsProps['items'] = [
-  {
-    key: '1',
-    label: 'Nome',
-    children: 'Sidão',
-  },
-  {
-    key: '2',
-    label: 'Email',
-    children: 'Email',
-    span: { xs: 2 },
-  },
-  {
-    key: '3',
-    label: 'Telefone',
-    children: '88 9.9988-9999',
-  },
-  {
-    key: '4',
-    label: 'CPF',
-    children: '123.123.123-00',
-    span: { xs: 2 },
-  },
-];
-
-const paymentItems: DescriptionsProps['items'] = [
-  {
-    key: '5',
-    label: 'Usage Time',
-    children: '2019-04-24 18:00:00',
-    span: { xs: 2 },
-  },
-  {
-    key: '6',
-    label: 'Status',
-    children: <Badge status="processing" text="Running" />,
-    span: { xs: 3 },
-  },
-  {
-    key: '7',
-    label: 'Negotiated Amount',
-    children: '$80.00',
-  },
-  {
-    key: '8',
-    label: 'Discount',
-    children: '$20.00',
-  },
-  {
-    key: '9',
-    label: 'Official Receipts',
-    children: '$60.00',
-  },
-  {
-    key: '10',
-    label: 'Config Info',
-    children: (
-      <>
-        Data disk type: MongoDB
-        <br />
-        Database version: 3.4
-        <br />
-        Package: dds.mongo.mid
-        <br />
-        Storage space: 10 GB
-        <br />
-        Replication factor: 3
-        <br />
-        Region: East China 1
-        <br />
-      </>
-    ),
-  },
-];
-
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
-  const { order } = useOrderDetail(orderId);
+  const { order, loading } = useOrderDetail(orderId);
+
+  const userItems: DescriptionsProps['items'] = [
+    {
+      key: '1',
+      label: 'Nome',
+      children: order?.user?.name,
+    },
+    {
+      key: '2',
+      label: 'Email',
+      children: order?.user?.email,
+      span: { xs: 2 },
+    },
+    {
+      key: '3',
+      label: 'Telefone',
+      children: order?.user?.phone,
+    },
+    {
+      key: '4',
+      label: 'CPF',
+      children: order?.user.cpf,
+      span: { xs: 2 },
+    },
+  ];
+
+  const paymentItems: DescriptionsProps['items'] = [
+    {
+      key: '1',
+      label: 'Preço',
+      children: order?.payment?.price,
+      span: { xs: 2 },
+    },
+    {
+      key: '2',
+      label: 'Desconto',
+      children: order?.payment?.discount,
+      span: { xs: 3 },
+    },
+    {
+      key: '3',
+      label: 'Preço Final',
+      children: order?.payment?.finalPrice,
+    },
+    {
+      key: '4',
+      label: 'Tipo de Pagamento',
+      children: order?.payment?.type,
+    },
+    {
+      key: '5',
+      label: 'Status',
+      children: order?.payment?.paymentStatus?.name,
+    },
+  ];
 
   const listBreadcrumb: IListBreadcrumb[] = [
     {
@@ -100,13 +81,21 @@ const OrderDetail: React.FC = () => {
 
   return (
     <Screen listBrandcrumb={listBreadcrumb}>
-      <Descriptions title="Dados do Usuário" bordered items={userItems} />
-      <Divider />
-      <Descriptions title="Dados do Pagamento" bordered items={paymentItems} />
-      <Divider />
-      <Descriptions title="Dados do Endereço" bordered items={paymentItems} />
-      <Divider />
-      <Descriptions title="Produtos" bordered items={paymentItems} />
+      {!order || loading ? (
+        <DisplayFlexJustifyCenter>
+          <Spin size="large" />
+        </DisplayFlexJustifyCenter>
+      ) : (
+        <>
+          <Descriptions title="Dados do Usuário" bordered items={userItems} />
+          <Divider />
+          <Descriptions title="Dados do Pagamento" bordered items={paymentItems} />
+          <Divider />
+          <Descriptions title="Dados do Endereço" bordered items={paymentItems} />
+          <Divider />
+          <Descriptions title="Produtos" bordered items={paymentItems} />
+        </>
+      )}
     </Screen>
   );
 };
