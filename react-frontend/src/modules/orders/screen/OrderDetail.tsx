@@ -4,7 +4,10 @@ import { useParams } from 'react-router-dom';
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Screen from '../../../shared/components/screen/Screen';
 import { DisplayFlexJustifyCenter } from '../../../shared/components/styles/display.styles';
+import { insertMaskInCEP } from '../../../shared/functions/address';
+import { insertMaskInCpf } from '../../../shared/functions/cpf';
 import { convertNumberToMoney } from '../../../shared/functions/money';
+import { insertMaskInPhone } from '../../../shared/functions/phone';
 import ListOrderProduct from '../components/ListOrderProduct';
 import { useOrderDetail } from '../hooks/useOrderDetail';
 import { EOrderRoutesEnum } from '../routes';
@@ -28,12 +31,12 @@ const OrderDetail: React.FC = () => {
     {
       key: '3',
       label: 'Telefone',
-      children: order?.user?.phone,
+      children: insertMaskInPhone(order?.user?.phone || ''),
     },
     {
       key: '4',
       label: 'CPF',
-      children: order?.user.cpf,
+      children: insertMaskInCpf(order?.user.cpf || ''),
       span: { xs: 2 },
     },
   ];
@@ -92,7 +95,7 @@ const OrderDetail: React.FC = () => {
     {
       key: '5',
       label: 'CEP',
-      children: order?.address?.cep,
+      children: insertMaskInCEP(order?.address?.cep || ''),
     },
   ];
 

@@ -1,7 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 
 import Order from '.';
-import OrderDetail from './screen/OrderDatail';
+import OrderDetail from './screen/OrderDetail';
 
 export enum EOrderRoutesEnum {
   ORDER = '/order',
