@@ -1,8 +1,11 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
+import { AUTHORIZATION_KEY } from '../../../constants/authorizationConstants';
+import { ERROR_ACCESS_DANIED, ERROR_CONNECTION } from '../../../constants/errorsStatus';
 import { URL_AUTH } from '../../../constants/urls';
-import {
+import { EMethodsEnum } from '../../../enums/methods.enum';
+import ConnectionAPI, {
   connectionAPIDelete,
   connectionAPIGet,
   connectionAPIPatch,
@@ -13,7 +16,9 @@ import {
 const mockAxios = new MockAdapter(axios);
 
 const RETURN_VALUE = 'returnValue';
+const TOKEN_MOCK = 'TOKEN_MOCK';
 const BODY_MOCK = { name: 'BODY_MOCK' };
+const ERRO_MOCK = { response: { data: { message: ERROR_ACCESS_DANIED } } };
 
 describe('connectionAPI function', () => {
   describe('connectionAPIGet', () => {
@@ -80,6 +85,70 @@ describe('connectionAPI function', () => {
 
       expect(spyAxios.mock.calls[0][0]).toEqual(URL_AUTH);
       expect(spyAxios.mock.calls[0][1]).toEqual(BODY_MOCK);
+    });
+  });
+
+  describe('test connect', () => {
+    it('should return success', async () => {
+      mockAxios.onGet(URL_AUTH).reply(200, RETURN_VALUE);
+
+      const returnGet = await ConnectionAPI.connect(URL_AUTH, EMethodsEnum.GET);
+
+      expect(returnGet).toEqual(RETURN_VALUE);
+    });
+
+    it('should return error 401', async () => {
+      mockAxios.onGet(URL_AUTH).reply(401, ERRO_MOCK);
+
+      expect(ConnectionAPI.connect(URL_AUTH, EMethodsEnum.GET)).rejects.toThrow(
+        Error(ERRO_MOCK.response.data.message ?? ERROR_ACCESS_DANIED),
+      );
+    });
+
+    it('should return error 403', async () => {
+      mockAxios.onGet(URL_AUTH).reply(403, ERRO_MOCK);
+
+      expect(ConnectionAPI.connect(URL_AUTH, EMethodsEnum.GET)).rejects.toThrow(
+        Error(ERRO_MOCK.response.data.message ?? ERROR_ACCESS_DANIED),
+      );
+    });
+    it('should return error 400', async () => {
+      mockAxios.onGet(URL_AUTH).reply(400);
+
+      expect(ConnectionAPI.connect(URL_AUTH, EMethodsEnum.GET)).rejects.toThrow(
+        Error(ERROR_CONNECTION),
+      );
+    });
+    it('should return error netWorkErro', async () => {
+      mockAxios.onGet(URL_AUTH).networkError();
+
+      expect(ConnectionAPI.connect(URL_AUTH, EMethodsEnum.GET)).rejects.toThrow(
+        Error(ERROR_CONNECTION),
+      );
+    });
+  });
+
+  describe('test call', () => {
+    it('should header not send authorization', async () => {
+      const spyAxios = jest.spyOn(axios, 'get');
+      mockAxios.onGet(URL_AUTH).reply(200, RETURN_VALUE);
+
+      await ConnectionAPI.call<string, string>(URL_AUTH, EMethodsEnum.GET);
+
+      expect(spyAxios.mock.calls[0][1]?.headers?.Authorization).toEqual(null);
+      expect(spyAxios.mock.calls[0][1]?.headers?.['Content-Type']).toEqual('application/json');
+    });
+
+    it('should header send authorization', async () => {
+      localStorage.setItem(AUTHORIZATION_KEY, TOKEN_MOCK);
+
+      const spyAxios = jest.spyOn(axios, 'get');
+      mockAxios.onGet(URL_AUTH).reply(200, RETURN_VALUE);
+
+      await ConnectionAPI.call<string, string>(URL_AUTH, EMethodsEnum.GET);
+
+      expect(spyAxios.mock.calls[0][1]?.headers?.Authorization).toEqual(null);
+      expect(spyAxios.mock.calls[0][1]?.headers?.['Content-Type']).toEqual('application/json');
     });
   });
 });
