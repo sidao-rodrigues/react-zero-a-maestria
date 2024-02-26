@@ -1,10 +1,12 @@
 import { ColumnsType } from 'antd/es/table';
+import { useNavigate } from 'react-router-dom';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Screen from '../../../shared/components/screen/Screen';
 import Table from '../../../shared/components/table/Table';
 import { IOrderType } from '../../../shared/types/OrderType';
 import { useOrder } from '../hooks/useOrder';
+import { EOrderRoutesEnum } from '../routes';
 
 const columns: ColumnsType<IOrderType> = [
   {
@@ -35,6 +37,7 @@ const columns: ColumnsType<IOrderType> = [
 
 const Order: React.FC = () => {
   const { orders } = useOrder();
+  const navigate = useNavigate();
 
   const listBreadcrumb: IListBreadcrumb[] = [
     {
@@ -47,7 +50,14 @@ const Order: React.FC = () => {
 
   return (
     <Screen listBrandcrumb={listBreadcrumb}>
-      <Table columns={columns} dataSource={orders} rowKey="id" />
+      <Table
+        onRow={(record) => ({
+          onClick: () => navigate(EOrderRoutesEnum.ORDER_ID),
+        })}
+        columns={columns}
+        dataSource={orders}
+        rowKey="id"
+      />
     </Screen>
   );
 };
