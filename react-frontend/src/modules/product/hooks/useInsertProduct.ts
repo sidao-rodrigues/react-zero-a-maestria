@@ -21,10 +21,11 @@ const DEFAULT_PRODUCT: IInsertProduct = {
 
 export const useInsertProduct = (productId?: string) => {
   // const { setNotification } = useGlobalReducer();
-  const { request, loading: loadingRequest } = useRequests();
-  const { product: productReducer, setProduct: setProductReducer } = useProductReducer();
   const navigate = useNavigate();
+  const { request } = useRequests();
+  const { product: productReducer, setProduct: setProductReducer } = useProductReducer();
 
+  const [loadingProduct, setLoadingProduct] = useState<boolean>(false);
   const [loading] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
@@ -39,13 +40,19 @@ export const useInsertProduct = (productId?: string) => {
   }, [product]);
 
   useEffect(() => {
-    if (productId) {
-      setIsEdit(true);
-      request(
+    const findProduct = async () => {
+      setLoadingProduct(true);
+      await request(
         URL_PRODUCT_ID.replace('{productId}', `${productId}`),
         EMethodsEnum.GET,
         setProductReducer,
       );
+      setLoadingProduct(false);
+    };
+
+    if (productId) {
+      setIsEdit(true);
+      findProduct();
     } else {
       setProductReducer(undefined);
       setProduct(DEFAULT_PRODUCT);
@@ -100,9 +107,16 @@ export const useInsertProduct = (productId?: string) => {
         EMethodsEnum.PUT,
         undefined,
         product,
+        'Produto modificado com sucesso',
       );
     } else {
-      await request<IInsertProduct>(URL_PRODUCT, EMethodsEnum.POST, undefined, product);
+      await request<IInsertProduct>(
+        URL_PRODUCT,
+        EMethodsEnum.POST,
+        undefined,
+        product,
+        'Produto inserido com sucesso',
+      );
     }
     navigate(EProductRoutesEnum.PRODUCT);
 
@@ -122,7 +136,7 @@ export const useInsertProduct = (productId?: string) => {
     loading,
     isEdit,
     disabledButton,
-    loadingRequest,
+    loadingProduct,
     handleOnChangeInput,
     handleOnChangeSelect,
     handleInsertProduct,

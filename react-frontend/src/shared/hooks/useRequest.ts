@@ -21,12 +21,16 @@ export const useRequests = () => {
     method: TMethodType,
     saveGlobal?: (object: T) => void,
     body?: S | unknown,
+    message?: string,
   ): Promise<T | undefined> => {
     setLoading(true);
     return await ConnectionAPI.connect<T, S>(url, method, body)
       .then((result: T) => {
         if (saveGlobal) {
           saveGlobal(result);
+        }
+        if (message) {
+          setNotification('Sucesso', 'success', message);
         }
         return result;
       })

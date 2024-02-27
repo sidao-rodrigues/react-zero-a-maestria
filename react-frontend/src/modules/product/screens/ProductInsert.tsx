@@ -1,4 +1,3 @@
-import { Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
@@ -6,6 +5,7 @@ import Button from '../../../shared/components/buttons/button/button';
 import Input from '../../../shared/components/inputs/input/input';
 import InputMoney from '../../../shared/components/inputs/inputMoney/InputMoney';
 import Select from '../../../shared/components/inputs/select/Select';
+import Loading from '../../../shared/components/loading/Loading';
 import Screen from '../../../shared/components/screen/Screen';
 import {
   DisplayFlex,
@@ -24,7 +24,7 @@ const ProductInsert: React.FC = () => {
   const {
     isEdit,
     loading,
-    loadingRequest,
+    loadingProduct,
     disabledButton,
     product,
     handleOnChangeInput,
@@ -48,9 +48,9 @@ const ProductInsert: React.FC = () => {
 
   return (
     <Screen listBrandcrumb={listBreadcrumb}>
-      {loadingRequest ? (
+      {loadingProduct ? (
         <DisplayFlexJustifyCenter>
-          <Spin size="large" />
+          <Loading size="large" />
         </DisplayFlexJustifyCenter>
       ) : (
         <DisplayFlexJustifyCenter data-testid={ProductInsertTestIdEnum.PRODUCT_INSERT_CONTAINER}>

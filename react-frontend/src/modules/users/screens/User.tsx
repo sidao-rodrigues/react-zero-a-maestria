@@ -1,9 +1,10 @@
-import { Input, Spin } from 'antd';
+import { Input } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useMemo } from 'react';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Button from '../../../shared/components/buttons/button/button';
+import Loading from '../../../shared/components/loading/Loading';
 import Screen from '../../../shared/components/screen/Screen';
 import {
   DisplayFlexJustifyBetween,
@@ -71,7 +72,7 @@ const User: React.FC = () => {
     <Screen listBrandcrumb={listBreadcrumb}>
       {loading ? (
         <DisplayFlexJustifyCenter>
-          <Spin size="large" />
+          <Loading size="large" />
         </DisplayFlexJustifyCenter>
       ) : (
         <>

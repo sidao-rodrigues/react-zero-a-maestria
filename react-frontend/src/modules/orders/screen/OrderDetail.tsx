@@ -1,7 +1,8 @@
-import { Descriptions, DescriptionsProps, Divider, Spin } from 'antd';
+import { Descriptions, DescriptionsProps, Divider } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
+import Loading from '../../../shared/components/loading/Loading';
 import Screen from '../../../shared/components/screen/Screen';
 import { DisplayFlexJustifyCenter } from '../../../shared/components/styles/display.styles';
 import { insertMaskInCEP } from '../../../shared/functions/address';
@@ -116,7 +117,7 @@ const OrderDetail: React.FC = () => {
     <Screen listBrandcrumb={listBreadcrumb}>
       {!order || loading ? (
         <DisplayFlexJustifyCenter>
-          <Spin size="large" />
+          <Loading size="large" />
         </DisplayFlexJustifyCenter>
       ) : (
         <>
