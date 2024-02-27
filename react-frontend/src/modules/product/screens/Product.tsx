@@ -64,7 +64,7 @@ const Product = () => {
         render: (_, product: IProductType) => <a>{convertNumberToMoney(product.price)}</a>,
       },
       {
-        title: 'Action',
+        title: 'Ações',
         width: 240,
         key: 'x',
         render: (_, product) => (

@@ -1,18 +1,22 @@
 import { SearchProps } from 'antd/es/input';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { URL_CATEGORY } from '../../../shared/constants/urls';
 import { EMethodsEnum } from '../../../shared/enums/methods.enum';
 // import { useDataContext } from '../../../shared/hooks/useDataContext';
 import { useRequests } from '../../../shared/hooks/useRequest';
 import { useCategoryReducer } from '../../../store/reducers/categoryReducer/useCategoryReducer';
+import { ECategoryRoutesEnum } from '../routes';
 import { ICategoryType } from './../../../shared/types/CategoryType';
 
 export const useCategory = () => {
   // const { categories, setCategories } = useDataContext();
-  const { categories, setCategories } = useCategoryReducer();
-  const [categoriesFiltered, setCategoriesFiltered] = useState<ICategoryType[]>([]);
+  const navigate = useNavigate();
   const { request } = useRequests();
+  const { categories, setCategories } = useCategoryReducer();
+  const [categoryIdDelete, setCategoryIdDelete] = useState<number | undefined>();
+  const [categoriesFiltered, setCategoriesFiltered] = useState<ICategoryType[]>([]);
 
   useEffect(() => {
     if (!categories || categories.length === 0) {
@@ -34,8 +38,27 @@ export const useCategory = () => {
     }
   };
 
+  const handleOnClickCategory: React.MouseEventHandler<HTMLElement> = (): void => {
+    navigate(ECategoryRoutesEnum.CATEGORY_INSERT);
+  };
+
+  const handleOpenModalDelete = (categoryId: number) => {
+    setCategoryIdDelete(categoryId);
+  };
+
+  const handleCloseModalDelete = () => {
+    setCategoryIdDelete(undefined);
+  };
+
+  const handleConfirmDeleteCategory = () => {};
+
   return {
     categories: categoriesFiltered,
+    openModalDelete: !!categoryIdDelete,
     handleOnChangeSearch,
+    handleOnClickCategory,
+    handleOpenModalDelete,
+    handleCloseModalDelete,
+    handleConfirmDeleteCategory,
   };
 };
