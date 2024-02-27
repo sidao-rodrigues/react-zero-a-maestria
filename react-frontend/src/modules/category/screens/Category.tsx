@@ -26,6 +26,7 @@ const Category: React.FC = () => {
     handleOpenModalDelete,
     handleCloseModalDelete,
     handleConfirmDeleteCategory,
+    handleGoToEditCategory,
   } = useCategory();
 
   const columns: ColumnsType<ICategoryType> = useMemo(
@@ -59,7 +60,7 @@ const Category: React.FC = () => {
           <LimitedContainer width={180}>
             <DisplayFlex>
               <LimitedContainer width={90} margin="0px 16px 0px 0px">
-                <Button onClick={() => null} icon={<EditOutlined />}>
+                <Button onClick={() => handleGoToEditCategory(category.id)} icon={<EditOutlined />}>
                   Editar
                 </Button>
               </LimitedContainer>

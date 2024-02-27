@@ -1,6 +1,7 @@
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Button from '../../../shared/components/buttons/button/button';
 import Input from '../../../shared/components/inputs/input/input';
+import Loading from '../../../shared/components/loading/Loading';
 import Screen from '../../../shared/components/screen/Screen';
 import {
   DisplayFlexJustifyCenter,
@@ -11,8 +12,15 @@ import { useInsertCategory } from '../hooks/useInsertCategory';
 import { ECategoryRoutesEnum } from '../routes';
 
 const CategoryInsert: React.FC = () => {
-  const { name, loading, disabledButton, handleOnChangeName, insertCategory, handleOnClickCancel } =
-    useInsertCategory();
+  const {
+    name,
+    loading,
+    disabledButton,
+    categoryId,
+    handleOnChangeName,
+    insertCategory,
+    handleOnClickCancel,
+  } = useInsertCategory();
 
   const listBreadcrumb: IListBreadcrumb[] = [
     {
@@ -23,39 +31,45 @@ const CategoryInsert: React.FC = () => {
       navigateTo: ECategoryRoutesEnum.CATEGORY,
     },
     {
-      name: 'INSERIR CATEGORIA',
+      name: categoryId ? 'EDITAR CATEGORIA' : 'INSERIR CATEGORIA',
     },
   ];
 
   return (
     <Screen listBrandcrumb={listBreadcrumb}>
       <DisplayFlexJustifyCenter>
-        <LimitedContainer width={400}>
-          <Input
-            onChange={handleOnChangeName}
-            value={name}
-            title="Nome"
-            placeholder="Nome"
-            margin="0px 0px 16px 0px"
-          />
-          <DisplayFlexJustifyRight>
-            <LimitedContainer margin="0px 8px" width={120}>
-              <Button onClick={handleOnClickCancel} danger>
-                Cancelar
-              </Button>
-            </LimitedContainer>
-            <LimitedContainer width={160}>
-              <Button
-                disabled={disabledButton}
-                loading={loading}
-                onClick={insertCategory}
-                type="primary"
-              >
-                Inserir Categoria
-              </Button>
-            </LimitedContainer>
-          </DisplayFlexJustifyRight>
-        </LimitedContainer>
+        {loading && categoryId ? (
+          <DisplayFlexJustifyCenter>
+            <Loading size="large" />
+          </DisplayFlexJustifyCenter>
+        ) : (
+          <LimitedContainer width={400}>
+            <Input
+              onChange={handleOnChangeName}
+              value={name}
+              title="Nome"
+              placeholder="Nome"
+              margin="0px 0px 16px 0px"
+            />
+            <DisplayFlexJustifyRight>
+              <LimitedContainer margin="0px 8px" width={120}>
+                <Button onClick={handleOnClickCancel} danger>
+                  Cancelar
+                </Button>
+              </LimitedContainer>
+              <LimitedContainer width={160}>
+                <Button
+                  disabled={disabledButton}
+                  loading={loading}
+                  onClick={insertCategory}
+                  type="primary"
+                >
+                  {categoryId ? 'Salvar' : 'Inserir Categoria'}
+                </Button>
+              </LimitedContainer>
+            </DisplayFlexJustifyRight>
+          </LimitedContainer>
+        )}
       </DisplayFlexJustifyCenter>
     </Screen>
   );

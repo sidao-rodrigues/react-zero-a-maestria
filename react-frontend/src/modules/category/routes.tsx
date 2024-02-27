@@ -6,6 +6,7 @@ import CategoryInsert from './screens/CategoryInsert';
 export enum ECategoryRoutesEnum {
   CATEGORY = '/category',
   CATEGORY_INSERT = '/category/insert',
+  CATEGORY_EDIT = '/category/:categoryId',
 }
 
 export const categoryScreenRoutes: RouteObject[] = [
@@ -15,6 +16,10 @@ export const categoryScreenRoutes: RouteObject[] = [
   },
   {
     path: ECategoryRoutesEnum.CATEGORY_INSERT,
+    element: <CategoryInsert />,
+  },
+  {
+    path: ECategoryRoutesEnum.CATEGORY_EDIT,
     element: <CategoryInsert />,
   },
 ];
