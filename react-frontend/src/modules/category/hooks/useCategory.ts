@@ -2,7 +2,7 @@ import { SearchProps } from 'antd/es/input';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { URL_CATEGORY } from '../../../shared/constants/urls';
+import { URL_CATEGORY, URL_CATEGORY_ID } from '../../../shared/constants/urls';
 import { EMethodsEnum } from '../../../shared/enums/methods.enum';
 // import { useDataContext } from '../../../shared/hooks/useDataContext';
 import { useRequests } from '../../../shared/hooks/useRequest';
@@ -50,7 +50,17 @@ export const useCategory = () => {
     setCategoryIdDelete(undefined);
   };
 
-  const handleConfirmDeleteCategory = () => {};
+  const handleConfirmDeleteCategory = async () => {
+    await request(
+      URL_CATEGORY_ID.replace('{categoryId}', `${categoryIdDelete}`),
+      EMethodsEnum.DELETE,
+      undefined,
+      undefined,
+      `Categoria (${categoryIdDelete}) excluída com sucesso!`,
+    );
+    await request<ICategoryType[]>(URL_CATEGORY, EMethodsEnum.GET, setCategories);
+    setCategoryIdDelete(undefined);
+  };
 
   return {
     categories: categoriesFiltered,
