@@ -10,7 +10,7 @@ import { EUserRoutesEnum } from '../routes';
 
 export const userUserInsert = () => {
   const navigate = useNavigate();
-  const { request, loading } = useRequests();
+  const { request } = useRequests();
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
   const [user, setUser] = useState<IInsertUser>({
     name: '',
