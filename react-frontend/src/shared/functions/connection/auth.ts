@@ -4,6 +4,7 @@ import { ELoginRoutesEnum } from '../../../modules/login/routes';
 import { IUserType } from '../../../modules/login/types/UserType';
 import { AUTHORIZATION_KEY } from '../../constants/authorizationConstants';
 import { URL_USER } from '../../constants/urls';
+import { IUserTokenType } from '../../types/UsertTokenType';
 import { connectionAPIGet } from './connectionAPI';
 import { getItemStorage, removeItemStorage, setItemStorage } from './storageProxy';
 
@@ -16,6 +17,15 @@ export const setAuthorizationToken = (token?: string) => {
 };
 
 export const getAuthorizationToken = () => getItemStorage(AUTHORIZATION_KEY);
+
+export const getUserInfoByToken = (): IUserTokenType | undefined => {
+  const token = getAuthorizationToken();
+  const tokenSplited = token?.split('.');
+
+  if (tokenSplited && tokenSplited.length > 1) {
+    return JSON.parse(window.atob(tokenSplited[1]));
+  }
+};
 
 export const verifyLoggedIn = async () => {
   const token = getAuthorizationToken();
