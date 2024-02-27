@@ -1,5 +1,5 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
+import { CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Input, Modal } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useMemo } from 'react';
 
@@ -23,8 +23,16 @@ const { Search } = Input;
 
 const Product = () => {
   // const { products, setProducts } = useDataContext();
-  const { products, handleOnClickInsert, handleOnSearch, handleDeleteProduct, handleEditProduct } =
-    useProduct();
+  const {
+    products,
+    openModalDelete,
+    handleOnClickInsert,
+    handleOnSearch,
+    handleDeleteProduct,
+    handleEditProduct,
+    handleCloseModalDelete,
+    handleOpenModalDelete,
+  } = useProduct();
 
   const columns: ColumnsType<IProductType> = useMemo(
     () => [
@@ -71,7 +79,7 @@ const Product = () => {
                   Editar
                 </Button>
                 <Button
-                  onClick={() => handleDeleteProduct(product.id)}
+                  onClick={() => handleOpenModalDelete(product.id)}
                   icon={<DeleteOutlined />}
                   danger
                 >
@@ -97,6 +105,17 @@ const Product = () => {
 
   return (
     <Screen listBrandcrumb={listBreadcrumb}>
+      <Modal
+        closeIcon={<CloseOutlined />}
+        title="Atenção"
+        open={openModalDelete}
+        onOk={handleDeleteProduct}
+        onCancel={handleCloseModalDelete}
+        okText="Sim"
+        cancelText="Cancelar"
+      >
+        <p>Tem certeza que deseja excluir esse produto?</p>
+      </Modal>
       <DisplayFlexJustifyBetween margin="0px 0px 16px 0px">
         <LimitedContainer width={240}>
           <Search placeholder="Buscar Produto" onSearch={handleOnSearch} enterButton />

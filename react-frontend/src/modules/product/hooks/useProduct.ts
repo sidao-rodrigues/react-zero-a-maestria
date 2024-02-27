@@ -10,6 +10,7 @@ import { useProductReducer } from '../../../store/reducers/productReducer/usePro
 import { EProductRoutesEnum } from '../routes';
 
 export const useProduct = () => {
+  const [productIdDelete, setProductIdDelete] = useState<number | undefined>();
   const { products, setProducts } = useProductReducer();
   const [productsFiltered, setProductsFiltered] = useState<IProductType[]>([]);
   const { request } = useRequests();
@@ -37,20 +38,32 @@ export const useProduct = () => {
     }
   };
 
-  const handleDeleteProduct = async (productId: number) => {
-    await request(URL_PRODUCT_ID.replace('{productId}', `${productId}`), EMethodsEnum.DELETE);
+  const handleDeleteProduct = async () => {
+    await request(URL_PRODUCT_ID.replace('{productId}', `${productIdDelete}`), EMethodsEnum.DELETE);
     await request<IProductType[]>(URL_PRODUCT, EMethodsEnum.GET, setProducts);
+    setProductIdDelete(undefined);
   };
 
   const handleEditProduct = async (productId: number) => {
     navigate(EProductRoutesEnum.PRODUCT_EDIT.replace(':productId', `${productId}`));
   };
 
+  const handleCloseModalDelete = () => {
+    setProductIdDelete(undefined);
+  };
+
+  const handleOpenModalDelete = (productId: number) => {
+    setProductIdDelete(productId);
+  };
+
   return {
     products: productsFiltered,
+    openModalDelete: !!productIdDelete,
     handleOnClickInsert,
     handleOnSearch,
     handleDeleteProduct,
     handleEditProduct,
+    handleCloseModalDelete,
+    handleOpenModalDelete,
   };
 };
