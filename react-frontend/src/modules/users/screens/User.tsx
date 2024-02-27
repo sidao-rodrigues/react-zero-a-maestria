@@ -54,7 +54,7 @@ const columns: ColumnsType<IUserType> = [
 ];
 
 const User: React.FC = () => {
-  const { users, loading, handleOnChangeSearch } = useUser();
+  const { users, loading, handleOnChangeSearch, handleGoToInsertAdmin } = useUser();
 
   const userToken = useMemo(() => getUserInfoByToken(), []);
 
@@ -82,7 +82,7 @@ const User: React.FC = () => {
 
             <LimitedContainer width={180}>
               {userToken?.typeUser === EUserTypeEnum.ROOT && (
-                <Button type="primary" onClick={() => null}>
+                <Button type="primary" onClick={handleGoToInsertAdmin}>
                   Inserir Admin
                 </Button>
               )}
