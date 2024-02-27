@@ -42,10 +42,15 @@ export const useProduct = () => {
     await request<IProductType[]>(URL_PRODUCT, EMethodsEnum.GET, setProducts);
   };
 
+  const handleEditProduct = async (productId: number) => {
+    navigate(EProductRoutesEnum.PRODUCT_EDIT.replace(':productId', `${productId}`));
+  };
+
   return {
     products: productsFiltered,
     handleOnClickInsert,
     handleOnSearch,
     handleDeleteProduct,
+    handleEditProduct,
   };
 };

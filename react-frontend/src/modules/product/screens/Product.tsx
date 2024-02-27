@@ -19,7 +19,8 @@ const { Search } = Input;
 
 const Product = () => {
   // const { products, setProducts } = useDataContext();
-  const { products, handleOnClickInsert, handleOnSearch, handleDeleteProduct } = useProduct();
+  const { products, handleOnClickInsert, handleOnSearch, handleDeleteProduct, handleEditProduct } =
+    useProduct();
 
   const columns: ColumnsType<IProductType> = useMemo(
     () => [
@@ -53,7 +54,12 @@ const Product = () => {
       {
         title: 'Action',
         key: '',
-        render: (_, product) => <a onClick={() => handleDeleteProduct(product.id)}>Deletar</a>,
+        render: (_, product) => (
+          <>
+            <a onClick={() => handleEditProduct(product.id)}>Editar</a>
+            <a onClick={() => handleDeleteProduct(product.id)}>Deletar</a>
+          </>
+        ),
       },
     ],
     [],

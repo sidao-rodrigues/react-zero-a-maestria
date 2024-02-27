@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { IListBreadcrumb } from '../../../shared/components/breadcrumb/Breadcrumb';
 import Button from '../../../shared/components/buttons/button/button';
@@ -18,6 +18,7 @@ import { useInsertProduct } from '../hooks/useInsertProduct';
 import { EProductRoutesEnum } from '../routes';
 
 const ProductInsert: React.FC = () => {
+  const { productId } = useParams<{ productId: string }>();
   const { categories } = useCategory();
   const {
     loading,
@@ -26,7 +27,7 @@ const ProductInsert: React.FC = () => {
     handleOnChangeInput,
     handleOnChangeSelect,
     handleInsertProduct,
-  } = useInsertProduct();
+  } = useInsertProduct(productId);
 
   const navigate = useNavigate();
 
