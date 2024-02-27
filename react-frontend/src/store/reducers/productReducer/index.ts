@@ -22,7 +22,7 @@ export const productSlice = createSlice({
       state.products = action.payload;
     },
     setProductAction: (state, action: PayloadAction<IProductType | undefined>) => {
-      state.product = action.payload;
+      state.product = action?.payload;
     },
   },
 });

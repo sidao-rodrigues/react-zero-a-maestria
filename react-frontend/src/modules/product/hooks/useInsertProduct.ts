@@ -4,30 +4,31 @@ import { useNavigate } from 'react-router-dom';
 import { URL_PRODUCT, URL_PRODUCT_ID } from '../../../shared/constants/urls';
 import { IInsertProduct } from '../../../shared/dtos/InsertProduct.dto';
 import { EMethodsEnum } from '../../../shared/enums/methods.enum';
-import { connectionAPIPost } from '../../../shared/functions/connection/connectionAPI';
 import { useRequests } from '../../../shared/hooks/useRequest';
-import { useGlobalReducer } from '../../../store/reducers/globalReducer/useGlobalReducer';
 import { useProductReducer } from '../../../store/reducers/productReducer/useProductReducer';
 import { EProductRoutesEnum } from '../routes';
 
+const DEFAULT_PRODUCT: IInsertProduct = {
+  name: '',
+  price: 0,
+  image: '',
+  weight: 0,
+  length: 0,
+  height: 0,
+  width: 0,
+  diameter: 0,
+};
+
 export const useInsertProduct = (productId?: string) => {
-  const { setNotification } = useGlobalReducer();
-  const { request } = useRequests();
+  // const { setNotification } = useGlobalReducer();
+  const { request, loading: loadingRequest } = useRequests();
   const { product: productReducer, setProduct: setProductReducer } = useProductReducer();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const [disabledButton, setDisabledButton] = useState<boolean>(true);
-  const [product, setProduct] = useState<IInsertProduct>({
-    name: '',
-    price: 0,
-    image: '',
-    weight: 0,
-    length: 0,
-    height: 0,
-    width: 0,
-    diameter: 0,
-  });
+  const [product, setProduct] = useState<IInsertProduct>(DEFAULT_PRODUCT);
 
   useEffect(() => {
     if (product.name && product.categoryId && product.image && product?.price > 0) {
@@ -38,12 +39,17 @@ export const useInsertProduct = (productId?: string) => {
   }, [product]);
 
   useEffect(() => {
-    setProductReducer(undefined);
-    request(
-      URL_PRODUCT_ID.replace('{productId}', `${productId}`),
-      EMethodsEnum.GET,
-      setProductReducer,
-    );
+    if (productId) {
+      setIsEdit(true);
+      request(
+        URL_PRODUCT_ID.replace('{productId}', `${productId}`),
+        EMethodsEnum.GET,
+        setProductReducer,
+      );
+    } else {
+      setProductReducer(undefined);
+      setProduct(DEFAULT_PRODUCT);
+    }
   }, [productId]);
 
   useEffect(() => {
@@ -57,9 +63,16 @@ export const useInsertProduct = (productId?: string) => {
         width: productReducer.width,
         height: productReducer.height,
         diameter: productReducer.diameter,
+        categoryId: productReducer.category?.id,
       });
+    } else {
+      setProduct(DEFAULT_PRODUCT);
     }
   }, [productReducer]);
+
+  const handleOnClickCancel = (): void => {
+    navigate(EProductRoutesEnum.PRODUCT);
+  };
 
   const handleOnChangeInput = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -80,24 +93,39 @@ export const useInsertProduct = (productId?: string) => {
   };
 
   const handleInsertProduct = async () => {
-    setLoading(true);
-    await connectionAPIPost<IInsertProduct>(URL_PRODUCT, product)
-      .then(() => {
-        setNotification('Sucesso!', 'success', 'Produto Inserido com Sucesso!');
-        navigate(EProductRoutesEnum.PRODUCT);
-      })
-      .catch((error: Error) => {
-        setNotification(error.message, 'error');
-      });
-    setLoading(false);
+    // setLoading(true);
+    if (productId) {
+      await request<IInsertProduct>(
+        URL_PRODUCT_ID.replace('{productId}', `${productId}`),
+        EMethodsEnum.PUT,
+        undefined,
+        product,
+      );
+    } else {
+      await request<IInsertProduct>(URL_PRODUCT, EMethodsEnum.POST, undefined, product);
+    }
+    navigate(EProductRoutesEnum.PRODUCT);
+
+    // await connectionAPIPost<IInsertProduct>(URL_PRODUCT, product)
+    //   .then(() => {
+    //     setNotification('Sucesso!', 'success', 'Produto Inserido com Sucesso!');
+    //     navigate(EProductRoutesEnum.PRODUCT);
+    //   })
+    //   .catch((error: Error) => {
+    //     setNotification(error.message, 'error');
+    //   });
+    // setLoading(false);
   };
 
   return {
     product,
     loading,
+    isEdit,
     disabledButton,
+    loadingRequest,
     handleOnChangeInput,
     handleOnChangeSelect,
     handleInsertProduct,
+    handleOnClickCancel,
   };
 };
